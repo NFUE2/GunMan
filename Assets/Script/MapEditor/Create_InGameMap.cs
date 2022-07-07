@@ -9,7 +9,9 @@ public class Create_InGameMap : EditorWindow
     static List<GameObject> OpenNode;
     static List<GameObject> CloseNode;
 
-    Object[] BoxTile;
+    static Object[] BoxTile;
+
+    Vector2 Scroll;
 
     [MenuItem("MapEditor/InGame")]
     static void showWindow()
@@ -18,6 +20,7 @@ public class Create_InGameMap : EditorWindow
         NewStage();
         OpenNode = new List<GameObject>();
         CloseNode = new List<GameObject>();
+        BoxTile = Resources.LoadAll("Tile/InGame");
     }
 
     private void OnGUI()
@@ -30,6 +33,10 @@ public class Create_InGameMap : EditorWindow
             delete();
         GUILayout.EndHorizontal();
 
+
+
+
+
         //BoxTile = Resources.LoadAll<Object>("Tile/InGame");
 
         //int select = GUILayout.SelectionGrid();
@@ -37,8 +44,14 @@ public class Create_InGameMap : EditorWindow
 
     void ViewTile()
     {
+        List<Texture> Thumnail = new List<Texture>();
 
+        Scroll = EditorGUILayout.BeginScrollView(Scroll,GUILayout.MaxHeight(1000.0f),GUILayout.MaxWidth(1000.0f));
 
+        for (int i = 0; i < BoxTile.Length; i++)
+            Thumnail.Add(AssetPreview.GetAssetPreview(BoxTile[i]));
+
+        
 
 
     }
@@ -92,13 +105,12 @@ public class Create_InGameMap : EditorWindow
             
         Debug.Log("삭제");
 
+        //Destroy(GameObject.Find("OpenNode") as Object);
+        //Destroy(GameObject.Find("CloseNode") as Object);
 
-        Destroy(GameObject.Find("OpenNode") as Object);
-        Destroy(GameObject.Find("CloseNode") as Object);
-
-        //Destroy함수는 런타임때에 작동해서 에디터 모드에서는 DestroyImmediate함수를 사용해야한다.
-        //DestroyImmediate(GameObject.Find("OpenNode") as Object,false);
-        //DestroyImmediate(GameObject.Find("CloseNode") as Object,false);
+        //destroy함수는 런타임때에 작동해서 에디터 모드에서는 destroyimmediate함수를 사용해야한다.
+        DestroyImmediate(GameObject.Find("OpenNode") as Object, false);
+        DestroyImmediate(GameObject.Find("CloseNode") as Object, false);
 
         OpenNode.Clear();
         CloseNode.Clear();
