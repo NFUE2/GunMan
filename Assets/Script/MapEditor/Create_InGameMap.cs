@@ -6,21 +6,29 @@ using UnityEditor;
 
 public class Create_InGameMap : EditorWindow
 {
-    static List<GameObject> OpenNode;
-    static List<GameObject> CloseNode;
+    List<GameObject> OpenNode;
+    List<GameObject> CloseNode;
 
-    static Object[] BoxTile;
+    Object[] BoxTile;
 
     Vector2 Scroll;
+    int ChoiceTileNum;
 
     [MenuItem("MapEditor/InGame")]
     static void showWindow()
     {
         GetWindow(typeof(Create_InGameMap)).Show();
-        NewStage();
+    }
+    private void OnEnable()
+    {
         OpenNode = new List<GameObject>();
         CloseNode = new List<GameObject>();
         BoxTile = Resources.LoadAll("Tile/InGame");
+        NewStage();
+    }
+
+    private void OnDisable()
+    {
     }
 
     private void OnGUI()
@@ -33,7 +41,7 @@ public class Create_InGameMap : EditorWindow
             delete();
         GUILayout.EndHorizontal();
 
-
+        ViewTile();
 
 
 
@@ -42,22 +50,23 @@ public class Create_InGameMap : EditorWindow
         //int select = GUILayout.SelectionGrid();
     }
 
+    //에디터로 사용할 타일들을 미리보기해주는 함수이다.
+    //이전에 만든 에디터와 비슷하게 만들었는데 미리보기의 크기가 다들 제각각이라 좀 더 봐야할듯
     void ViewTile()
     {
-        List<Texture> Thumnail = new List<Texture>();
+        Texture[] Thumnail = new Texture[BoxTile.Length];
 
-        Scroll = EditorGUILayout.BeginScrollView(Scroll,GUILayout.MaxHeight(1000.0f),GUILayout.MaxWidth(1000.0f));
+        Scroll = EditorGUILayout.BeginScrollView(Scroll, GUILayout.MaxHeight(2000.0f), GUILayout.MaxWidth(2000.0f));
 
         for (int i = 0; i < BoxTile.Length; i++)
-            Thumnail.Add(AssetPreview.GetAssetPreview(BoxTile[i]));
+            Thumnail[i] = (AssetPreview.GetAssetPreview(BoxTile[i]));
 
-        
+        ChoiceTileNum = GUILayout.SelectionGrid(ChoiceTileNum,Thumnail, 4, GUILayout.MaxHeight(500.0f), GUILayout.MaxWidth(500.0f));
 
-
+        EditorGUILayout.EndScrollView();
     }
 
-    
-    static void NewStage()
+    void NewStage()
     {
         if (OpenNode == null)
         {
@@ -115,4 +124,5 @@ public class Create_InGameMap : EditorWindow
         OpenNode.Clear();
         CloseNode.Clear();
     }
+
 }

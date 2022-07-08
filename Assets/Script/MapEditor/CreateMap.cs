@@ -111,7 +111,6 @@ public class CreateMap : EditorWindow
             for (int i = 0; i < Tile.Length; i++)
                 Thumnail[i] = AssetPreview.GetAssetPreview(Tile[i]);
 
-
             choice = GUILayout.SelectionGrid(choice, Thumnail, 4, GUILayout.MaxHeight(500.0f), GUILayout.MaxWidth(500.0f)); //그리드로 버튼을 생성함
             ChoiceTile = (GameObject)Tile[choice];
         }
